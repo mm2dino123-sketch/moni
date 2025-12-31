@@ -1,0 +1,148 @@
+-- 🧠 Monis Lagger - Steal Brainrot Edition (Compact)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+
+local Players=game:GetService("Players")
+local TweenService=game:GetService("TweenService")
+local RunService=game:GetService("RunService")
+local LocalPlayer=Players.LocalPlayer
+
+_G.lagging=false
+_G.lagFolder=nil
+
+-- Server lag function (doesn't affect you)
+_G.monisLag=function()
+    if _G.lagging then return end
+    _G.lagging=true
+    _G.lagFolder=Instance.new("Folder",workspace)
+    _G.lagFolder.Name="MonisLag"
+    
+    spawn(function()
+        while _G.lagging do
+            for i=1,150 do
+                local p=Instance.new("Part")
+                p.Name="LagPart"
+                p.Size=Vector3.new(0.2,0.2,0.2)
+                p.Material=Enum.Material.Neon
+                p.BrickColor=BrickColor.Random()
+                p.CanCollide=true
+                p.Anchored=false
+                p.Position=Vector3.new(math.random(-1000,1000),math.random(50,500),math.random(-1000,1000))
+                p.Parent=_G.lagFolder
+                
+                -- Spam physics
+                TweenService:Create(p,TweenInfo.new(0.05),{Size=Vector3.new(5,5,5)}):Play()
+                TweenService:Create(p,TweenInfo.new(0.1),{CFrame=p.CFrame* CFrame.Angles(0,math.rad(360),0)}):Play()
+            end
+            
+            -- Remote spam (server strain)
+            for _,v in pairs(Players:GetPlayers()) do
+                if v~=LocalPlayer and v.Character then
+                    pcall(function()
+                        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("LAGGING BY MONIS","All")
+                    end)
+                end
+            end
+            
+            wait(0.008)
+        end
+    end)
+end
+
+_G.stopMonisLag=function()
+    _G.lagging=false
+    if _G.lagFolder then
+        _G.lagFolder:Destroy()
+        _G.lagFolder=nil
+    end
+end
+
+-- Compact UI
+local sg=Instance.new("ScreenGui",LocalPlayer.PlayerGui)
+sg.Name="MonisLagger"
+sg.ResetOnSpawn=false
+
+local frame=Instance.new("Frame",sg)
+frame.Size=UDim2.new(0,220,0,80)
+frame.Position=UDim2.new(0,20,0,20)
+frame.BackgroundColor3=Color3.fromRGB(15,15,25)
+frame.BorderSizePixel=0
+frame.Active=true
+
+local corner=Instance.new("UICorner",frame)
+corner.CornerRadius=UDim.new(0,12)
+
+local title=Instance.new("TextLabel",frame)
+title.Size=UDim2.new(1,0,0,30)
+title.Text="🧠 MONIS LAGGER 💥"
+title.TextColor3=Color3.fromRGB(255,0,100)
+title.BackgroundTransparency=1
+title.TextScaled=true
+title.Font=Enum.Font.GothamBold
+
+local lagBtn=Instance.new("TextButton",frame)
+lagBtn.Size=UDim2.new(1,-20,0,35)
+lagBtn.Position=UDim2.new(0,10,0,40)
+lagBtn.Text="🚀 CLICK TO LAG SERVER (Steal Brainrots!)"
+lagBtn.TextColor3=Color3.fromRGB(255,255,255)
+lagBtn.BackgroundColor3=Color3.fromRGB(50,150,50)
+lagBtn.TextScaled=true
+lagBtn.Font=Enum.Font.GothamBold
+lagBtn.BorderSizePixel=0
+
+local btnCorner=Instance.new("UICorner",lagBtn)
+btnCorner.CornerRadius=UDim.new(0,8)
+
+-- Button logic
+lagBtn.MouseButton1Click:Connect(function()
+    if _G.lagging then
+        _G.stopMonisLag()
+        lagBtn.Text="🚀 CLICK TO LAG SERVER (Steal Brainrots!)"
+        lagBtn.BackgroundColor3=Color3.fromRGB(50,150,50)
+        game.StarterGui:SetCore("SendNotification",{
+            Title="Monis Lagger";
+            Text="Lag STOPPED! 🛑";
+            Duration=2;
+        })
+    else
+        _G.monisLag()
+        lagBtn.Text="🛑 CLICK TO STOP LAG"
+        lagBtn.BackgroundColor3=Color3.fromRGB(200,50,50)
+        game.StarterGui:SetCore("SendNotification",{
+            Title="Monis Lagger";
+            Text="SERVER LAGGING! STEAL BRAINTOTS NOW! 😈";
+            Duration=3;
+        })
+    end
+end)
+
+-- Draggable
+local dragging=false
+frame.InputBegan:Connect(function(i)
+    if i.UserInputType==Enum.UserInputType.MouseButton1 then
+        dragging=true
+    end
+end)
+frame.InputEnded:Connect(function(i)
+    if i.UserInputType==Enum.UserInputType.MouseButton1 then
+        dragging=false
+    end
+end)
+game:GetService("UserInputService").InputChanged:Connect(function(i)
+    if dragging and i.UserInputType==Enum.UserInputType.MouseMovement then
+        frame.Position=UDim2.new(frame.Position.X.Scale,frame.Position.X.Offset+i.Delta.X,frame.Position.Y.Scale,frame.Position.Y.Offset+i.Delta.Y)
+    end
+end)
+
+-- Glow effect
+local stroke=Instance.new("UIStroke",frame)
+stroke.Color=Color3.fromRGB(255,0,100)
+stroke.Thickness=2
+stroke.Transparency=0.5
+
+game.StarterGui:SetCore("SendNotification",{
+    Title="🧠 Monis Lagger Loaded!";
+    Text="Click button to lag server & steal brainrots!";
+    Duration=4;
+})
+
+print("🧠 Monis Lagger - Ready to steal brainrots!")
