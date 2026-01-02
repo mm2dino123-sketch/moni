@@ -912,3 +912,69 @@ end
 cb.Stealer.AutoSteal = function(state)
     -- your auto-steal logic here
 end
+--// Moni's Hub Loader (Key Protected)
+--// UI-only access gate
+
+local KEY = "MONI-1234-KEY"   -- your key
+local SCRIPT_URL = "https://your-raw-url-here"  -- pastebin raw or github raw
+
+-- UI prompt
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Size = UDim2.new(0, 300, 0, 150)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
+Frame.BorderSizePixel = 0
+Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 10)
+
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Position = UDim2.new(0, 0, 0, 10)
+Title.BackgroundTransparency = 1
+Title.Text = "Enter Key"
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 20
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local Box = Instance.new("TextBox", Frame)
+Box.Size = UDim2.new(1, -20, 0, 30)
+Box.Position = UDim2.new(0, 10, 0, 55)
+Box.PlaceholderText = "Enter key..."
+Box.Text = ""
+Box.Font = Enum.Font.Gotham
+Box.TextSize = 14
+Box.BackgroundColor3 = Color3.fromRGB(25, 25, 40)
+Box.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", Box).CornerRadius = UDim.new(0, 6)
+
+local Button = Instance.new("TextButton", Frame)
+Button.Size = UDim2.new(1, -20, 0, 32)
+Button.Position = UDim2.new(0, 10, 0, 100)
+Button.Text = "Unlock"
+Button.Font = Enum.Font.GothamBold
+Button.TextSize = 15
+Button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", Button).CornerRadius = UDim.new(0, 6)
+
+local function notify(msg)
+    pcall(function()
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Moni's Hub",
+            Text = msg,
+            Duration = 3
+        })
+    end)
+end
+
+Button.MouseButton1Click:Connect(function()
+    if Box.Text == KEY then
+        notify("Key accepted. Loading Moni's Hub...")
+        ScreenGui:Destroy()
+
+        -- load your hub
+        loadstring(game:HttpGet(SCRIPT_URL))()
+    else
+        notify("Invalid key.")
+    end
+end)
