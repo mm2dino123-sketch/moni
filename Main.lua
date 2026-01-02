@@ -903,3 +903,12 @@ end)
 switchTab("Main")
 
 notify("Moni's Hub", "UI loaded. Use LeftCtrl or MH button to toggle hub.", 5)
+local cb = _G.MONIS_HUB_CALLBACKS
+
+cb.Booster.BoosterToggle = function(state)
+    -- your booster logic here
+end
+
+cb.Stealer.AutoSteal = function(state)
+    -- your auto-steal logic here
+end
