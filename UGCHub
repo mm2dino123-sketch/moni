@@ -1,6 +1,3 @@
--- =============================================
---   UGC SEMI TP + AUTO GRAB
--- =============================================
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
